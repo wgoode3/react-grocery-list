@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Form from './Components/Form';
+import List from './Components/List';
 
 
 function App() {
 
-  const [item, setItem] = useState("");
-  const [amount, setAmount] = useState("");
   const [basket, setBasket] = useState([]);
 
-  const addItem = (e) => {
-    e.preventDefault();
-    console.log({item, amount});
-    setBasket([...basket, {item, amount}]);
-    setItem("");
-    setAmount("");
+  const newItem = (data) => {
+    console.log(data);
+    setBasket([...basket, data]);
+  }
+
+  const deleteItem = (i) => {
+    console.log(i);
+    let copy = [...basket];
+    copy.splice(i, 1);
+    setBasket(copy);
   }
 
   return (
@@ -26,44 +30,13 @@ function App() {
           <div className="card">
             <div className="card-header">Add an item</div>
             <div className="card-body">
-              <form onSubmit={addItem}> 
-                <div className="form-group">
-                  <label>Item:</label>
-                  <input 
-                    type="text" 
-                    name="item" 
-                    className="form-control" 
-                    onChange={e => setItem(e.target.value)} 
-                    value={item}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Amount:</label>
-                  <input 
-                    type="text" 
-                    name="amount" 
-                    className="form-control" 
-                    onChange={e => setAmount(e.target.value)}
-                    value={amount}
-                  />
-                </div>
-                <input 
-                  type="submit" 
-                  value="Add Item to List" 
-                  className="btn btn-outline-info btn-block"
-                />
-              </form>
+              <Form newItem={newItem} />
             </div>
           </div>
         </div>
         <div className="col-sm-8">
           <h3>Current List</h3>
-          <ul className="list-group">
-            {basket.map(grocery => 
-              <li className="list-group-item">{grocery.item}, {grocery.amount}</li>
-            )}
-            <li className="list-group-item">{item}, {amount}</li>
-          </ul>
+          <List basket={basket} delete={deleteItem}/>
         </div>
       </div>
     </div>
